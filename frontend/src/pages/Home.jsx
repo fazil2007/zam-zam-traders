@@ -17,7 +17,10 @@ function Home() {
   const [categoryError, setCategoryError] = useState("");
   const [productError, setProductError] = useState("");
 
-  // Fetch categories and products from the backend
+  const shopMapLink =
+    "https://maps.app.goo.gl/HqFMfbuJNuQAJffV8";
+
+  // Fetch categories and products
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -57,7 +60,6 @@ function Home() {
     fetchProducts();
   }, []);
 
-  // Display the first four products as featured products
   const featuredProducts = products.slice(0, 4);
 
   return (
@@ -113,21 +115,16 @@ function Home() {
               <ProductCard
                 key={product.product_id}
                 product={{
-                  // Product information
                   id: product.product_id,
                   name: product.product_name,
                   brand: product.brand,
                   price: Number(product.price),
                   unit: product.unit,
                   image_url: product.image_url,
-
-                  // Current inventory quantity
                   stock_quantity:
                     product.stock_quantity == null
                       ? null
                       : Number(product.stock_quantity),
-
-                  // Product-specific reorder threshold
                   reorder_level:
                     product.reorder_level == null
                       ? null
@@ -138,13 +135,75 @@ function Home() {
           </div>
         )}
 
-        {/* View All Products */}
         <Link
           to="/products"
           className="view-all-products"
         >
           View All Products
         </Link>
+      </section>
+
+      {/* Shop Location Section */}
+      <section
+        className="shop-location-section"
+        style={{
+          padding: "40px 20px",
+          textAlign: "center",
+          backgroundColor: "#f8fafc",
+        }}
+      >
+        <h2>📍 Visit Zam Zam Traders</h2>
+
+        <p>
+          Quality building materials at the right price.
+          Visit us in Thuvarankurichy, Trichy Service Road,
+          Tamil Nadu.
+        </p>
+
+        {/* Google Maps */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "900px",
+            margin: "24px auto",
+            borderRadius: "12px",
+            overflow: "hidden",
+            boxShadow: "0 4px 14px rgba(0, 0, 0, 0.12)",
+          }}
+        >
+          <iframe
+            title="Zam Zam Traders location map"
+            src="https://maps.google.com/maps?q=Thuvarankurichy%2C%20Tamil%20Nadu&z=13&output=embed"
+            width="100%"
+            height="350"
+            style={{
+              border: 0,
+              display: "block",
+            }}
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
+
+        {/* Get Directions Button */}
+        <a
+          href={shopMapLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-block",
+            marginTop: "10px",
+            padding: "13px 24px",
+            backgroundColor: "#166534",
+            color: "#ffffff",
+            textDecoration: "none",
+            borderRadius: "8px",
+            fontWeight: "bold",
+          }}
+        >
+          🚗 Get Directions to Our Shop
+        </a>
       </section>
     </main>
   );
