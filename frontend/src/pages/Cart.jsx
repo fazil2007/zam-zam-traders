@@ -12,6 +12,11 @@ const productImages = {
   "PVC Pipe": "/images/pipe.jpg",
 };
 
+const whatsappContacts = [
+  { name: "WhatsApp 1", number: "919944263946" },
+  { name: "WhatsApp 2", number: "919500487920" },
+];
+
 function Cart() {
   const {
     cartItems,
@@ -21,6 +26,50 @@ function Cart() {
     cartCount,
     cartTotal,
   } = useCart();
+
+  // Send the complete cart to WhatsApp
+  const handleWhatsAppEnquiry = (number) => {
+    if (cartItems.length === 0) {
+      return;
+    }
+
+    const productLines = cartItems.map((item, index) => {
+      const price = Number(item.price);
+      const subtotal = price * Number(item.quantity);
+
+      return [
+        `${index + 1}. ${item.name}`,
+        `   Brand: ${item.brand || "Standard"}`,
+        `   Quantity: ${item.quantity} ${item.unit || "unit(s)"}`,
+        `   Price: ₹${price.toLocaleString("en-IN")} per ${item.unit || "unit"}`,
+        `   Subtotal: ₹${subtotal.toLocaleString("en-IN")}`,
+      ].join("\n");
+    });
+
+    const message = [
+      "Hello Zam Zam Traders!",
+      "",
+      "I would like to request a quotation for these products:",
+      "",
+      ...productLines,
+      "",
+      `Number of items: ${cartCount}`,
+      `Estimated cart total: ₹${Number(cartTotal).toLocaleString("en-IN")}`,
+      "",
+      "Please confirm the latest prices, stock availability, and delivery options.",
+      "",
+      "Thank you!",
+    ].join("\n");
+
+    const whatsappUrl =
+      `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+
+    window.open(
+      whatsappUrl,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
 
   return (
     <main>
@@ -66,7 +115,7 @@ function Cart() {
                   <div className="cart-product-info">
                     <h3>{item.name}</h3>
 
-                    <p>{item.brand}</p>
+                    <p>{item.brand || "Standard"}</p>
 
                     <p>
                       ₹{Number(item.price).toLocaleString("en-IN")}
@@ -123,9 +172,7 @@ function Cart() {
                     <button
                       type="button"
                       className="remove-cart-button"
-                      onClick={() => {
-                        removeFromCart(item.id);
-                      }}
+                      onClick={() => removeFromCart(item.id)}
                     >
                       Remove
                     </button>
@@ -155,8 +202,53 @@ function Cart() {
               <div className="cart-total-section">
                 <h2>
                   Total: ₹
-                  {cartTotal.toLocaleString("en-IN")}
+                  {Number(cartTotal).toLocaleString("en-IN")}
                 </h2>
+
+                {/* WhatsApp Cart Enquiry */}
+                <div
+                  style={{
+                    marginTop: "16px",
+                    marginBottom: "16px",
+                    padding: "16px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <h3>Request a WhatsApp Quotation</h3>
+
+                  <p>
+                    Send your complete cart to Zam Zam Traders
+                    to confirm prices and availability.
+                  </p>
+
+                  {whatsappContacts.map((contact) => (
+                    <button
+                      key={contact.number}
+                      type="button"
+                      onClick={() =>
+                        handleWhatsAppEnquiry(contact.number)
+                      }
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        marginBottom: "10px",
+                        padding: "12px",
+                        border: "none",
+                        borderRadius: "8px",
+                        backgroundColor: "#25D366",
+                        color: "#ffffff",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Send to {contact.name} (
+                      +{contact.number.slice(0, 2)}{" "}
+                      {contact.number.slice(2)}
+                      )
+                    </button>
+                  ))}
+                </div>
 
                 <Link
                   to="/products"
