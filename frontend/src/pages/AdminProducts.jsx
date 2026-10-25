@@ -1,6 +1,10 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCategories } from "../services/categoryService";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function AdminProducts() {
   const navigate = useNavigate();
@@ -67,7 +71,7 @@ function AdminProducts() {
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/products",
+        `${API_BASE_URL}/api/products`,
         {
           method: "POST",
           headers: {
@@ -332,3 +336,4 @@ function AdminProducts() {
 }
 
 export default AdminProducts;
+

@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Checkout() {
   const { cartItems, cartTotal, clearCart } = useCart();
   const navigate = useNavigate();
@@ -33,9 +36,11 @@ function Checkout() {
       return;
     }
 
-    if (!customer.name.trim() ||
-        !customer.phone.trim() ||
-        !customer.address.trim()) {
+    if (
+      !customer.name.trim() ||
+      !customer.phone.trim() ||
+      !customer.address.trim()
+    ) {
       setError("Please fill in all customer details.");
       return;
     }
@@ -43,7 +48,7 @@ function Checkout() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/orders", {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +83,7 @@ function Checkout() {
       console.error("Checkout error:", err);
       setError(
         err.message ||
-        "Unable to connect to the server. Please try again."
+          "Unable to connect to the server. Please try again."
       );
     } finally {
       setLoading(false);

@@ -1,7 +1,11 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getProducts } from "../services/productService";
 import { getCategories } from "../services/categoryService";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function ManageProducts() {
   const navigate = useNavigate();
@@ -107,7 +111,7 @@ function ManageProducts() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/products/${editingProduct.product_id}`,
+        `${API_BASE_URL}/api/products/${editingProduct.product_id}`,
         {
           method: "PUT",
           headers: {
@@ -185,10 +189,7 @@ function ManageProducts() {
             + Add Product
           </Link>
 
-          <Link
-            to="/admin"
-            className="manage-back-button"
-          >
+          <Link to="/admin" className="manage-back-button">
             Dashboard
           </Link>
         </div>
@@ -450,3 +451,4 @@ function ManageProducts() {
 }
 
 export default ManageProducts;
+

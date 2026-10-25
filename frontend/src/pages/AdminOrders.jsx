@@ -1,7 +1,11 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:5000/api/orders";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+const API_URL = `${API_BASE_URL}/api/orders`;
 
 const STATUSES = [
   "Pending",
@@ -113,20 +117,15 @@ function AdminOrders() {
     (order) => order.order_status === "Cancelled"
   ).length;
 
-  const totalOrderValue = orders.reduce(
-    (total, order) => {
-      if (order.order_status === "Cancelled") {
-        return total;
-      }
+  const totalOrderValue = orders.reduce((total, order) => {
+    if (order.order_status === "Cancelled") {
+      return total;
+    }
 
-      const amount = Number(order.total_amount);
+    const amount = Number(order.total_amount);
 
-      return total + (
-        Number.isFinite(amount) ? amount : 0
-      );
-    },
-    0
-  );
+    return total + (Number.isFinite(amount) ? amount : 0);
+  }, 0);
 
   // Search and filter
   const filteredOrders = orders.filter((order) => {
@@ -355,10 +354,7 @@ function AdminOrders() {
         </div>
 
         <div className="manage-products-actions">
-          <Link
-            to="/admin"
-            className="manage-back-button"
-          >
+          <Link to="/admin" className="manage-back-button">
             Dashboard
           </Link>
 
@@ -438,17 +434,13 @@ function AdminOrders() {
             type="search"
             placeholder="Search order ID, customer, or phone..."
             value={searchTerm}
-            onChange={(event) =>
-              setSearchTerm(event.target.value)
-            }
+            onChange={(event) => setSearchTerm(event.target.value)}
             aria-label="Search orders"
           />
 
           <select
             value={statusFilter}
-            onChange={(event) =>
-              setStatusFilter(event.target.value)
-            }
+            onChange={(event) => setStatusFilter(event.target.value)}
             aria-label="Filter orders by status"
           >
             <option value="All">All Statuses</option>
@@ -501,9 +493,7 @@ function AdminOrders() {
                       {order.delivery_address}
                     </td>
 
-                    <td>
-                      {formatCurrency(order.total_amount)}
-                    </td>
+                    <td>{formatCurrency(order.total_amount)}</td>
 
                     <td>{formatDate(order.created_at)}</td>
 
@@ -533,10 +523,7 @@ function AdminOrders() {
                         }
                       >
                         {STATUSES.map((status) => (
-                          <option
-                            key={status}
-                            value={status}
-                          >
+                          <option key={status} value={status}>
                             {status}
                           </option>
                         ))}
@@ -706,3 +693,4 @@ function AdminOrders() {
 }
 
 export default AdminOrders;
+

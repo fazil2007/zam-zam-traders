@@ -1,5 +1,9 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function AdminInventory() {
   const navigate = useNavigate();
@@ -20,7 +24,7 @@ function AdminInventory() {
       setError("");
 
       const response = await fetch(
-        "http://localhost:5000/api/inventory"
+        `${API_BASE_URL}/api/inventory`
       );
 
       const data = await response.json();
@@ -160,7 +164,7 @@ function AdminInventory() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/inventory/${editingItem.product_id}`,
+        `${API_BASE_URL}/api/inventory/${editingItem.product_id}`,
         {
           method: "PUT",
           headers: {
@@ -249,10 +253,7 @@ function AdminInventory() {
         </div>
 
         <div className="manage-products-actions">
-          <Link
-            to="/admin"
-            className="manage-back-button"
-          >
+          <Link to="/admin" className="manage-back-button">
             Dashboard
           </Link>
 
@@ -488,9 +489,7 @@ function AdminInventory() {
                       </td>
 
                       <td>{item.brand || "—"}</td>
-
                       <td>{item.category_name || "—"}</td>
-
                       <td>{item.unit || "—"}</td>
 
                       <td>
@@ -502,9 +501,7 @@ function AdminInventory() {
                       </td>
 
                       <td>
-                        <span
-                          className={statusClasses[status]}
-                        >
+                        <span className={statusClasses[status]}>
                           {statusLabels[status]}
                         </span>
                       </td>
@@ -531,3 +528,4 @@ function AdminInventory() {
 }
 
 export default AdminInventory;
+

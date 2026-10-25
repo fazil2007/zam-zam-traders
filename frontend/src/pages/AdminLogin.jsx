@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function AdminLogin() {
   const navigate = useNavigate();
 
@@ -17,7 +20,7 @@ function AdminLogin() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/login",
+        `${API_BASE_URL}/api/auth/login`,
         {
           method: "POST",
           headers: {
@@ -40,7 +43,6 @@ function AdminLogin() {
         throw new Error("The server did not return an authentication token.");
       }
 
-      // Store the token for the admin session.
       sessionStorage.setItem("adminToken", data.token);
       sessionStorage.setItem(
         "adminUser",

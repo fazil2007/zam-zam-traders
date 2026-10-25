@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,6 +11,9 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function AdminAnalytics() {
   const navigate = useNavigate();
@@ -43,7 +47,7 @@ function AdminAnalytics() {
 
       const responses = await Promise.all(
         endpoints.map((endpoint) =>
-          fetch(`http://localhost:5000/api/analytics/${endpoint}`, {
+          fetch(`${API_BASE_URL}/api/analytics/${endpoint}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -51,7 +55,7 @@ function AdminAnalytics() {
         )
       );
 
-      // Check authentication before processing the results.
+      // Handle expired authentication.
       if (responses.some((response) => response.status === 401)) {
         sessionStorage.removeItem("adminToken");
         sessionStorage.removeItem("adminUser");
@@ -138,6 +142,7 @@ function AdminAnalytics() {
       {error && (
         <div className="analytics-error" role="alert">
           <p>{error}</p>
+
           <button type="button" onClick={loadAnalytics}>
             Try Again
           </button>
@@ -239,11 +244,14 @@ function AdminAnalytics() {
                         <td className="manage-product-name">
                           {product.product_name}
                         </td>
+
                         <td>{product.brand || "—"}</td>
+
                         <td>
                           {Number(product.total_quantity_sold || 0)}{" "}
                           {product.unit}
                         </td>
+
                         <td>{formatCurrency(product.total_sales)}</td>
                       </tr>
                     ))}
@@ -279,10 +287,13 @@ function AdminAnalytics() {
                         <td className="manage-product-name">
                           {product.product_name}
                         </td>
+
                         <td>{product.brand || "—"}</td>
+
                         <td>
                           {Number(product.quantity)} {product.unit}
                         </td>
+
                         <td>
                           {Number(product.reorder_level)} {product.unit}
                         </td>

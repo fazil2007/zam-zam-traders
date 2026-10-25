@@ -15,3 +15,8 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+# Database certificates
+backend/certs/
+
+# Local database backup
+database/zamzam_traders_backup.sql
